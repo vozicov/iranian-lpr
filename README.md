@@ -1,22 +1,37 @@
-#  Iranian LPR
+![Version](https://img.shields.io/badge/version-1.0-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+![Python](https://img.shields.io/badge/python-3.10+-blue)
+
+# Iranian LPR
 
 ## Iranian License Plate Recognition System
 
-An end-to-end Computer Vision system for detecting and recognizing Iranian vehicle license plates.
+My first end-to-end Computer Vision project for detecting and recognizing Iranian vehicle license plates.
 
-This project implements a complete pipeline that detects vehicles, localizes Iranian license plates, and extracts plate text using deep learning models.
+This project was my first serious step into Deep Learning and Computer Vision. The goal was to understand how a real-world AI pipeline is designed, trained, evaluated, and deployed.
 
----
-
-##  Project Overview
-
-Automatic License Plate Recognition (ALPR) is an important application in intelligent transportation systems, traffic monitoring, and smart city solutions.
-
-The goal of this project is to build a lightweight pipeline capable of processing vehicle images and returning detected license plates along with their recognized text through an API service.
+The system detects vehicles, locates Iranian license plates, recognizes plate text using OCR, and provides results through a REST API.
 
 ---
 
-##  Pipeline Architecture
+# Project Overview
+
+Automatic License Plate Recognition (ALPR) is one of the practical applications of Computer Vision in intelligent transportation systems, traffic monitoring, and smart city solutions.
+
+In this project, I built a complete Computer Vision pipeline including:
+
+- Data preparation
+- Object detection model training
+- Model evaluation
+- Image processing
+- Persian OCR
+- API deployment
+
+This repository contains the first version (v1.0) of the project.
+
+---
+
+# Pipeline Architecture
 
 ```
 Input Image
@@ -33,8 +48,7 @@ Iranian License Plate Detection
 Plate Image Processing
      |
      ↓
-Persian OCR
-(CRNN-based OCR Engine)
+Persian OCR Engine
      |
      ↓
 FastAPI JSON Response
@@ -42,34 +56,43 @@ FastAPI JSON Response
 
 ---
 
-##  Features
+# Demo
 
-- Vehicle detection using YOLOv8
-- Iranian license plate detection with a custom trained model
-- Persian license plate text recognition
-- End-to-end inference pipeline
-- FastAPI REST API
-- Evaluation tools for measuring detection performance
+Example input image:
+
+![Demo](assets/demo_input.jpg)
 
 ---
 
-##  Technologies
+# Features
+
+- Vehicle detection using YOLOv8
+- Iranian license plate detection using a custom trained model
+- Persian license plate text recognition
+- End-to-end inference pipeline
+- FastAPI REST API
+- Evaluation scripts for detection performance
+- Modular project structure
+
+---
+
+# Technologies
 
 - Python
 - PyTorch
 - Ultralytics YOLOv8
 - OpenCV
 - FastAPI
-- CRNN OCR
+- OCR Engine
 - Roboflow Dataset
 
 ---
 
-##  Model Evaluation
+# Model Evaluation
 
-The plate detection model was evaluated on validation and test samples using IoU-based matching.
+The plate detection model was evaluated using IoU-based matching.
 
-### Validation Results
+## Validation Results
 
 | Metric | Score |
 |---|---:|
@@ -77,7 +100,7 @@ The plate detection model was evaluated on validation and test samples using IoU
 | Recall | 83.0% |
 | F1 Score | 81.9% |
 
-### Test Results
+## Test Results
 
 | Metric | Score |
 |---|---:|
@@ -85,24 +108,36 @@ The plate detection model was evaluated on validation and test samples using IoU
 | Recall | 85.7% |
 | F1 Score | 83.3% |
 
-The evaluation includes analysis of:
+Evaluation includes:
+
 - True Positive detections
-- False Positive detections
+- False Positive cases
 - False Negative cases
 
 ---
 
-##  API Usage
+# Installation & Usage
 
-The project provides a FastAPI endpoint for image-based plate recognition.
+## 1. Clone the repository
 
-### Run API
+```bash
+git clone <repository-url>
+cd iranian-lpr
+```
+
+## 2. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+## 3. Run API server
 
 ```bash
 python api/server.py
 ```
 
-The API will start on:
+The API will start at:
 
 ```
 http://127.0.0.1:8000
@@ -110,16 +145,16 @@ http://127.0.0.1:8000
 
 ---
 
-### Send Image Request
+# API Usage
+
+Send an image:
 
 ```bash
 curl -X POST "http://127.0.0.1:8000/detect-plate" \
 -F "file=@image.jpg"
 ```
 
----
-
-### Example Response
+Example response:
 
 ```json
 {
@@ -138,66 +173,102 @@ curl -X POST "http://127.0.0.1:8000/detect-plate" \
 
 ---
 
-##  Project Structure
+# Project Structure
 
 ```
 iranian-lpr/
-│
+
 ├── api/
 │   └── server.py
-│
+
 ├── models/
 │   └── plate_detector.pt
-│
+
 ├── src/
 │   ├── detect_pipeline.py
 │   ├── ocr_engine.py
 │   ├── evaluate.py
+│   ├── compare_sweep.py
 │   ├── train_plate_v2.py
-│   └── prepare_plate_dataset.py
-│
+│   ├── prepare_plate_dataset.py
+│   └── test_batch.py
+
 ├── data/
 │   └── test_car.jpg
-│
+
+├── assets/
+│   └── demo_input.jpg
+
 ├── requirements.txt
 └── README.md
 ```
 
 ---
 
-##  Dataset
+# Dataset
 
-The plate detection model was trained using an Iranian license plate dataset from Roboflow:
+The license plate detection model was trained using an Iranian license plate dataset from Roboflow:
 
 https://universe.roboflow.com/sultan-space/iranian-plate
 
-The dataset is not included in this repository due to size limitations.
+The dataset is not included in this repository because of its size.
 
 ---
 
-##  Limitations
+# Training (Optional)
+
+If you want to retrain the plate detection model:
+
+```bash
+python src/prepare_plate_dataset.py
+
+python src/train_plate_v2.py
+```
+
+---
+
+# Current Limitations
+
+Computer Vision models are highly dependent on input quality.
 
 Current limitations:
 
-- OCR performance decreases on very blurry images
+- OCR accuracy decreases on blurry images
 - Extreme viewing angles can reduce detection accuracy
-- Very small license plates may not be detected correctly
-- Recognition quality depends on image resolution and lighting conditions
+- Very small license plates are harder to detect
+- Low-light conditions can affect recognition quality
 
 ---
 
-## Future Improvements
+# Future Improvements
 
-Possible improvements:
+Possible improvements for future versions:
 
-- Vehicle make and model classification
-- Improved Persian OCR with larger datasets
+- Iranian vehicle make and model classification
+- Improving Persian OCR accuracy with larger datasets
 - Real-time video stream processing
+- Traffic monitoring applications
+- Docker deployment
 - Model optimization for edge devices
-- Deployment with Docker
 
 ---
 
-##  License
+# Motivation
+
+This project was my first complete Computer Vision pipeline.
+
+Throughout this project, I focused on understanding the complete workflow of an AI project:
+
+- Preparing data
+- Training models
+- Evaluating results
+- Building inference pipelines
+- Deploying an API
+
+This project helped me gain practical experience in Deep Learning and Computer Vision, and more improvements will be added in future versions.
+
+---
+
+# License
 
 This project is released under the MIT License.
